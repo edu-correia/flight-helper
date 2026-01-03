@@ -1,4 +1,4 @@
-package com.educorreia.flighthelper.ui.theme
+package com.educorreia.flighthelper.core.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
