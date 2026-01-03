@@ -1,0 +1,91 @@
+package com.educorreia.flighthelper.features.main_page.presentation
+
+import android.Manifest
+import android.content.Intent
+import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.educorreia.flighthelper.core.ui.theme.FlightHelperTheme
+
+@Composable
+fun MainPageScreenRoot(
+    viewModel: MainPageViewModel = MainPageViewModel()
+) {
+    val context = LocalContext.current
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) {}
+
+    LaunchedEffect(true) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                MainPageEffect.ShowPostNotificationPermPopup -> {
+                    permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+                MainPageEffect.ShowPostPromotedNotificationPermPopup -> {
+                    val intent = Intent(Settings.ACTION_APP_NOTIFICATION_PROMOTION_SETTINGS).apply {
+                        putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                    }
+                    context.startActivity(intent)
+                }
+            }
+        }
+    }
+
+    MainPageScreen(
+        onEvent = viewModel::onEvent
+    )
+}
+
+@Composable
+fun MainPageScreen(
+    onEvent: (MainPageAction) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.SpaceEvenly,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text("Flight Helper")
+
+        Button(
+            onClick = { onEvent(MainPageAction.HandlePostNotificationPermission) }
+        ) {
+            Text("Check post notification permission")
+        }
+
+        Button(
+            onClick = { onEvent(MainPageAction.HandlePostPromotedNotificationPermission) }
+        ) {
+            Text("Check post promoted notification permission")
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MainPageScreenPreview() {
+    FlightHelperTheme {
+        MainPageScreen(
+            onEvent = {}
+        )
+    }
+}
