@@ -2,10 +2,14 @@ package com.educorreia.flighthelper.features.main_page.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.educorreia.flighthelper.core.data.domain.interfaces.FlightStatusNotifier
+import com.educorreia.flighthelper.core.data.domain.models.enums.FlightStatus
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
-class MainPageViewModel() : ViewModel() {
+class MainPageViewModel(
+    private val statusNotifier: FlightStatusNotifier
+) : ViewModel() {
     var effect = MutableSharedFlow<MainPageEffect>()
         private set
 
@@ -16,6 +20,9 @@ class MainPageViewModel() : ViewModel() {
             }
             is MainPageAction.HandlePostPromotedNotificationPermission -> {
                 handlePostPromotedNotificationPermission()
+            }
+            is MainPageAction.StartFlightStatusNotification -> {
+                statusNotifier.notifyFlightStatus(FlightStatus.FINISHED)
             }
         }
     }

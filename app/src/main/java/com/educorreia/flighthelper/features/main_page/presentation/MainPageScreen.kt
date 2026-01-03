@@ -19,13 +19,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.educorreia.flighthelper.core.data.gateways.FlightProgressNotificationHandler
 import com.educorreia.flighthelper.core.ui.theme.FlightHelperTheme
 
 @Composable
-fun MainPageScreenRoot(
-    viewModel: MainPageViewModel = MainPageViewModel()
-) {
+fun MainPageScreenRoot() {
     val context = LocalContext.current
+    val flightStatusNotifier by lazy { FlightProgressNotificationHandler(context.applicationContext) }
+    val viewModel = MainPageViewModel(flightStatusNotifier)
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
@@ -76,6 +77,12 @@ fun MainPageScreen(
             onClick = { onEvent(MainPageAction.HandlePostPromotedNotificationPermission) }
         ) {
             Text("Check post promoted notification permission")
+        }
+
+        Button(
+            onClick = { onEvent(MainPageAction.StartFlightStatusNotification) }
+        ) {
+            Text("Start flight status notification")
         }
     }
 }
