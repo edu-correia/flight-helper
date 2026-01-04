@@ -35,7 +35,7 @@ class FlightProgressNotificationHandler(
         const val NOTIFICATION_ID = 1234
 
         // Progress details
-        val NUMBER_OF_SEGMENTS = 5
+        val NUMBER_OF_SEGMENTS = 4
         const val PROGRESS_MAX = 100
     }
 
@@ -147,7 +147,7 @@ class FlightProgressNotificationHandler(
 
     private fun buildBaseNotification(): NotificationCompat.Builder {
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_logo_foreground)
             .setOngoing(true)
             .setRequestPromotedOngoing(true)
 
