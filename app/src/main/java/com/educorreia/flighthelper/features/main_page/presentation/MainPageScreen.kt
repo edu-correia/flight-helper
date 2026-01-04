@@ -17,8 +17,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.educorreia.flighthelper.R
 import com.educorreia.flighthelper.core.data.gateways.FlightProgressNotificationHandler
 import com.educorreia.flighthelper.core.ui.theme.FlightHelperTheme
 
@@ -65,24 +68,27 @@ fun MainPageScreen(
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Flight Helper")
+        Text(
+            text = stringResource(R.string.flight_helper_main_page_title),
+            fontSize = 24.sp
+        )
 
         Button(
             onClick = { onEvent(MainPageAction.HandlePostNotificationPermission) }
         ) {
-            Text("Check post notification permission")
+            Text(stringResource(R.string.check_post_notification_permission))
         }
 
         Button(
             onClick = { onEvent(MainPageAction.HandlePostPromotedNotificationPermission) }
         ) {
-            Text("Check post promoted notification permission")
+            Text(stringResource(R.string.check_post_promoted_notification_permission))
         }
 
         Button(
             onClick = { onEvent(MainPageAction.StartFlightStatusNotification) }
         ) {
-            Text("Start flight status notification")
+            Text(stringResource(R.string.start_flight_status_notification))
         }
     }
 }

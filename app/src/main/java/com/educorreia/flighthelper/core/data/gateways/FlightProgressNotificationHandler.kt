@@ -22,6 +22,8 @@ class FlightProgressNotificationHandler(
     private var notificationManager: NotificationManager = context
         .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
+    private val CHANNEL_NAME = context.getString(R.string.flight_status_channel_name)
+
     init {
         val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, IMPORTANCE_DEFAULT)
         notificationManager.createNotificationChannel(channel)
@@ -30,7 +32,6 @@ class FlightProgressNotificationHandler(
     private companion object {
         // Notification details
         const val CHANNEL_ID = "flight_status_channel_id"
-        const val CHANNEL_NAME = "flight_status_channel_name"
         const val NOTIFICATION_ID = 1234
 
         // Progress details
@@ -44,12 +45,12 @@ class FlightProgressNotificationHandler(
         when (flightStatus) {
             FlightStatus.CHECK_IN -> {
                 notificationBuilder
-                    .setContentTitle("Check-in is now open for your flight to Amsterdam.")
-                    .setContentText("You have till 10:30 PM to check-in.")
+                    .setContentTitle(context.getString(R.string.check_in_status_title))
+                    .setContentText(context.getString(R.string.check_in_status_subtitle))
                     .setStyle(getMiddleOfTheSegmentStyle(flightStatus))
                     .addAction(
                         NotificationCompat.Action.Builder(
-                            null, "View Boarding Pass",
+                            null, context.getString(R.string.view_boarding_pass_action_label),
                             createPendingIntent("VIEW_BOARDING_PASS")
                         ).build()
                     )
@@ -57,12 +58,12 @@ class FlightProgressNotificationHandler(
 
             FlightStatus.GATE_OPEN -> {
                 notificationBuilder
-                    .setContentTitle("Your flight is now boarding at Gate B12.")
-                    .setContentText("The gate will stay open till 11:45 PM.")
+                    .setContentTitle(context.getString(R.string.gate_open_status_title))
+                    .setContentText(context.getString(R.string.gate_open_status_subtitle))
                     .setStyle(getMiddleOfTheSegmentStyle(flightStatus))
                     .addAction(
                         NotificationCompat.Action.Builder(
-                            null, "View Airport Map",
+                            null, context.getString(R.string.view_airport_map_action_label),
                             createPendingIntent("VIEW_AIRPORT_MAP")
                         ).build()
                     )
@@ -70,19 +71,19 @@ class FlightProgressNotificationHandler(
 
             FlightStatus.IN_THE_AIR -> {
                 notificationBuilder
-                    .setContentTitle("Your flight from Berlin to Amsterdam is in the air.")
-                    .setContentText("Estimated arrival: 2:15 AM")
+                    .setContentTitle(context.getString(R.string.in_the_air_status_title))
+                    .setContentText(context.getString(R.string.in_the_air_status_subtitle))
                     .setStyle(getMiddleOfTheSegmentStyle(flightStatus))
             }
 
             FlightStatus.BAGGAGE_CLAIM -> {
                 notificationBuilder
-                    .setContentTitle("Your flight has landed.")
-                    .setContentText("Please claim your baggage now at carousel AA123.")
+                    .setContentTitle(context.getString(R.string.baggage_claim_status_title))
+                    .setContentText(context.getString(R.string.baggage_claim_status_subtitle))
                     .setStyle(getMiddleOfTheSegmentStyle(flightStatus))
                     .addAction(
                         NotificationCompat.Action.Builder(
-                            null, "Baggage Claim Info",
+                            null, context.getString(R.string.baggage_claim_info_action_label),
                             createPendingIntent("BAGGAGE_CLAIM")
                         ).build()
                     )
@@ -90,8 +91,8 @@ class FlightProgressNotificationHandler(
 
             FlightStatus.FINISHED -> {
                 notificationBuilder
-                    .setContentTitle("Thanks for flying with us!")
-                    .setContentText("We hope you had a great flight.")
+                    .setContentTitle(context.getString(R.string.finished_status_title))
+                    .setContentText(context.getString(R.string.finished_status_subtitle))
                     .setStyle(
                         buildBaseProgressStyle()
                             .setProgressTrackerIcon(getProgressIcon(flightStatus))
@@ -99,13 +100,13 @@ class FlightProgressNotificationHandler(
                     )
                     .addAction(
                         NotificationCompat.Action.Builder(
-                            null, "Rate Experience",
+                            null, context.getString(R.string.rate_experience_action_label),
                             createPendingIntent("RATE_EXPERIENCE")
                         ).build()
                     )
                     .addAction(
                         NotificationCompat.Action.Builder(
-                            null, "Explore Amsterdam",
+                            null, context.getString(R.string.explore_city_action_label),
                             createPendingIntent("EXPLORE_CITY")
                         ).build()
                     )
