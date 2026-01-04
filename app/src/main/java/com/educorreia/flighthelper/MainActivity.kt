@@ -1,6 +1,8 @@
 package com.educorreia.flighthelper
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -17,6 +19,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        handleIntent(intent)
+
         enableEdgeToEdge()
 
         setContent {
@@ -31,6 +35,19 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        val action = intent?.getStringExtra("FLIGHT_STATUS_ACTION")
+        if (action != null) {
+            Toast.makeText(applicationContext, action, Toast.LENGTH_LONG).show()
+            // TODO: Handle action through Compose navigation
         }
     }
 }
