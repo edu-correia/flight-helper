@@ -35,7 +35,7 @@ class FlightProgressNotificationHandler(
         const val NOTIFICATION_ID = 1234
 
         // Progress details
-        val NUMBER_OF_SEGMENTS = FlightStatus.entries.size
+        val NUMBER_OF_SEGMENTS = 5
         const val PROGRESS_MAX = 100
     }
 
@@ -43,53 +43,77 @@ class FlightProgressNotificationHandler(
         val notificationBuilder = buildBaseNotification()
 
         when (flightStatus) {
-            FlightStatus.CHECK_IN -> {
+            is FlightStatus.CheckIn -> {
                 notificationBuilder
-                    .setContentTitle(context.getString(R.string.check_in_status_title))
-                    .setContentText(context.getString(R.string.check_in_status_subtitle))
+                    .setContentTitle(
+                        context.getString(R.string.check_in_status_title,
+                            flightStatus.destinationName)
+                    )
+                    .setContentText(
+                        context.getString(R.string.check_in_status_subtitle,
+                            flightStatus.checkInDeadline)
+                    )
                     .setStyle(getMiddleOfTheSegmentStyle(flightStatus))
                     .addAction(
                         NotificationCompat.Action.Builder(
-                            null, context.getString(R.string.view_boarding_pass_action_label),
+                            null,
+                            context.getString(R.string.view_boarding_pass_action_label),
                             createPendingIntent("VIEW_BOARDING_PASS")
                         ).build()
                     )
             }
 
-            FlightStatus.GATE_OPEN -> {
+            is FlightStatus.GateOpen -> {
                 notificationBuilder
-                    .setContentTitle(context.getString(R.string.gate_open_status_title))
-                    .setContentText(context.getString(R.string.gate_open_status_subtitle))
+                    .setContentTitle(
+                        context.getString(R.string.gate_open_status_title,
+                            flightStatus.gateName)
+                    )
+                    .setContentText(
+                        context.getString(R.string.gate_open_status_subtitle,
+                        flightStatus.gateOpenDeadline)
+                    )
                     .setStyle(getMiddleOfTheSegmentStyle(flightStatus))
                     .addAction(
                         NotificationCompat.Action.Builder(
-                            null, context.getString(R.string.view_airport_map_action_label),
+                            null,
+                            context.getString(R.string.view_airport_map_action_label),
                             createPendingIntent("VIEW_AIRPORT_MAP")
                         ).build()
                     )
             }
 
-            FlightStatus.IN_THE_AIR -> {
+            is FlightStatus.InTheAir -> {
                 notificationBuilder
-                    .setContentTitle(context.getString(R.string.in_the_air_status_title))
-                    .setContentText(context.getString(R.string.in_the_air_status_subtitle))
+                    .setContentTitle(
+                        context.getString(R.string.in_the_air_status_title,
+                            flightStatus.originName, flightStatus.destinationName)
+                    )
+                    .setContentText(
+                        context.getString(R.string.in_the_air_status_subtitle,
+                            flightStatus.estimatedArrival)
+                    )
                     .setStyle(getMiddleOfTheSegmentStyle(flightStatus))
             }
 
-            FlightStatus.BAGGAGE_CLAIM -> {
+            is FlightStatus.BaggageClaim -> {
                 notificationBuilder
                     .setContentTitle(context.getString(R.string.baggage_claim_status_title))
-                    .setContentText(context.getString(R.string.baggage_claim_status_subtitle))
+                    .setContentText(
+                        context.getString(R.string.baggage_claim_status_subtitle,
+                        flightStatus.baggageCarouselName)
+                    )
                     .setStyle(getMiddleOfTheSegmentStyle(flightStatus))
                     .addAction(
                         NotificationCompat.Action.Builder(
-                            null, context.getString(R.string.baggage_claim_info_action_label),
+                            null,
+                            context.getString(R.string.baggage_claim_info_action_label),
                             createPendingIntent("BAGGAGE_CLAIM")
                         ).build()
                     )
             }
 
-            FlightStatus.FINISHED -> {
+            is FlightStatus.Finished -> {
                 notificationBuilder
                     .setContentTitle(context.getString(R.string.finished_status_title))
                     .setContentText(context.getString(R.string.finished_status_subtitle))
@@ -100,13 +124,16 @@ class FlightProgressNotificationHandler(
                     )
                     .addAction(
                         NotificationCompat.Action.Builder(
-                            null, context.getString(R.string.rate_experience_action_label),
+                            null,
+                            context.getString(R.string.rate_experience_action_label),
                             createPendingIntent("RATE_EXPERIENCE")
                         ).build()
                     )
                     .addAction(
                         NotificationCompat.Action.Builder(
-                            null, context.getString(R.string.explore_city_action_label),
+                            null,
+                            context.getString(R.string.explore_city_action_label,
+                                flightStatus.destinationName),
                             createPendingIntent("EXPLORE_CITY")
                         ).build()
                     )
@@ -145,18 +172,26 @@ class FlightProgressNotificationHandler(
 
     private fun getProgressIcon(flightStatus: FlightStatus): IconCompat {
         val iconRes = when (flightStatus) {
-            FlightStatus.CHECK_IN -> R.drawable.ic_ticket
-            FlightStatus.GATE_OPEN -> R.drawable.ic_doors
-            FlightStatus.IN_THE_AIR -> R.drawable.ic_airplane
-            FlightStatus.BAGGAGE_CLAIM -> R.drawable.ic_luggage
-            FlightStatus.FINISHED -> R.drawable.ic_check
+            is FlightStatus.CheckIn -> R.drawable.ic_ticket
+            is FlightStatus.GateOpen -> R.drawable.ic_doors
+            is FlightStatus.InTheAir -> R.drawable.ic_airplane
+            is FlightStatus.BaggageClaim -> R.drawable.ic_luggage
+            is FlightStatus.Finished -> R.drawable.ic_check
         }
 
         return IconCompat.createWithResource(context, iconRes)
     }
 
     private fun getProgressValue(flightStatus: FlightStatus): Int {
-        return (flightStatus.ordinal * (100 / NUMBER_OF_SEGMENTS)) + ((100 / NUMBER_OF_SEGMENTS) / 2)
+        val statusOrder = when (flightStatus) {
+            is FlightStatus.CheckIn -> 0
+            is FlightStatus.GateOpen -> 1
+            is FlightStatus.InTheAir -> 2
+            is FlightStatus.BaggageClaim -> 3
+            is FlightStatus.Finished -> 4
+        }
+
+        return (statusOrder * (100 / NUMBER_OF_SEGMENTS)) + ((100 / NUMBER_OF_SEGMENTS) / 2)
     }
 
     private fun createPendingIntent(action: String): PendingIntent {

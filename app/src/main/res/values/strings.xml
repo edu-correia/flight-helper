@@ -3,25 +3,25 @@
 
     <string name="flight_status_channel_name">Flight status channel</string>
 
-    <string name="check_in_status_title">Check-in is now open for your flight to Amsterdam.</string>
-    <string name="check_in_status_subtitle">You have till 10:30 PM to check-in.</string>
+    <string name="check_in_status_title">Check-in is now open for your flight to %1$s.</string>
+    <string name="check_in_status_subtitle">You have till %1$s to check-in.</string>
     <string name="view_boarding_pass_action_label">View Boarding Pass</string>
 
-    <string name="gate_open_status_title">Your flight is now boarding at Gate B12.</string>
-    <string name="gate_open_status_subtitle">The gate will stay open till 11:45 PM.</string>
+    <string name="gate_open_status_title">Your flight is now boarding at Gate %1$s.</string>
+    <string name="gate_open_status_subtitle">The gate will stay open till %1$s.</string>
     <string name="view_airport_map_action_label">View Airport Map</string>
 
-    <string name="in_the_air_status_title">Your flight from Berlin to Amsterdam is in the air.</string>
-    <string name="in_the_air_status_subtitle">Estimated arrival: 2:15 AM</string>
+    <string name="in_the_air_status_title">Your flight from %1$s to %2$s is in the air.</string>
+    <string name="in_the_air_status_subtitle">Estimated arrival: %1$s</string>
 
     <string name="baggage_claim_status_title">Your flight has landed.</string>
-    <string name="baggage_claim_status_subtitle">Please claim your baggage now at carousel AA123.</string>
+    <string name="baggage_claim_status_subtitle">Please claim your baggage now at carousel %1$s.</string>
     <string name="baggage_claim_info_action_label">Baggage Claim Info</string>
 
     <string name="finished_status_title">Thanks for flying with us!</string>
     <string name="finished_status_subtitle">We hope you had a great flight.</string>
     <string name="rate_experience_action_label">Rate Experience</string>
-    <string name="explore_city_action_label">Explore Amsterdam</string>
+    <string name="explore_city_action_label">Explore %1$s</string>
 
     <string name="flight_helper_main_page_title">Flight Helper: Track Your Flight</string>
     <string name="check_post_notification_permission">Check post notification permission</string>

@@ -22,7 +22,7 @@ class MainPageViewModel(
                 handlePostPromotedNotificationPermission()
             }
             is MainPageAction.StartFlightStatusNotification -> {
-                statusNotifier.notifyFlightStatus(FlightStatus.FINISHED)
+                statusNotifier.notifyFlightStatus(FlightStatus.Finished("Amsterdam"))
             }
         }
     }
