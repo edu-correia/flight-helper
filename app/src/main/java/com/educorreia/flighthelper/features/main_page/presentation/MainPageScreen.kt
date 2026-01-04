@@ -23,13 +23,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.educorreia.flighthelper.R
 import com.educorreia.flighthelper.core.data.gateways.FlightProgressNotificationHandler
+import com.educorreia.flighthelper.core.data.gateways.MockFlightStatusProvider
 import com.educorreia.flighthelper.core.ui.theme.FlightHelperTheme
 
 @Composable
 fun MainPageScreenRoot() {
     val context = LocalContext.current
     val flightStatusNotifier by lazy { FlightProgressNotificationHandler(context.applicationContext) }
-    val viewModel = MainPageViewModel(flightStatusNotifier)
+    val flightStatusProvider by lazy { MockFlightStatusProvider() }
+    val viewModel = MainPageViewModel(flightStatusNotifier, flightStatusProvider)
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()

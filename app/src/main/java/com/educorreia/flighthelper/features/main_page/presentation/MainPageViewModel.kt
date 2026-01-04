@@ -3,12 +3,13 @@ package com.educorreia.flighthelper.features.main_page.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.educorreia.flighthelper.core.data.domain.interfaces.FlightStatusNotifier
-import com.educorreia.flighthelper.core.data.domain.models.enums.FlightStatus
+import com.educorreia.flighthelper.core.data.domain.interfaces.FlightStatusProvider
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
 class MainPageViewModel(
-    private val statusNotifier: FlightStatusNotifier
+    private val statusNotifier: FlightStatusNotifier,
+    private val statusProvider: FlightStatusProvider
 ) : ViewModel() {
     var effect = MutableSharedFlow<MainPageEffect>()
         private set
@@ -22,7 +23,11 @@ class MainPageViewModel(
                 handlePostPromotedNotificationPermission()
             }
             is MainPageAction.StartFlightStatusNotification -> {
-                statusNotifier.notifyFlightStatus(FlightStatus.Finished("Amsterdam"))
+                viewModelScope.launch {
+                    statusProvider.getFlightStatusUpdates().collect { status ->
+                        statusNotifier.notifyFlightStatus(status)
+                    }
+                }
             }
         }
     }
